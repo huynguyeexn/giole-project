@@ -1,0 +1,4 @@
+mongoimport --host giole-app-mongodb --db giole-app --collection tinh-thanh --type json --file /data/db/backup/tinh-thanh.json --jsonArray --username root --password root --authenticationDatabase=admin
+mongoimport --host giole-app-mongodb --db giole-app --collection phuong-xa --type json --file /data/db/backup/phuong-xa.json --jsonArray --username root --password root --authenticationDatabase=admin
+mongoimport --host giole-app-mongodb --db giole-app --collection thon-xom --type json --file /data/db/backup/thon-xom.json --jsonArray --username root --password root --authenticationDatabase=admin
+mongoimport --host giole-app-mongodb --db giole-app --collection quan-huyen --type json --file /data/db/backup/quan-huyen.json --jsonArray --username root --password root --authenticationDatabase=admin

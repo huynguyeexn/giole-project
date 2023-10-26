@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  giole-app-dev:
+    container_name: '${DOCKER_APP_CONTAINER}'
+    image: '${DOCKER_APP_IMAGE}:latest'
+    build:
+      context: .
+      target: development
+    command: yarn dev
+    ports:
+      - '${APP_PORT_PUBLIC}:${APP_PORT}'
+    depends_on:
+      - '${DOCKER_DATABASE_CONTAINER}'
+    volumes:
+      - .:/usr/src/app
+      - ./node_modules:/usr/src/app/node_modules
+    restart: unless-stopped
+
+  giole-app-mongodb:
+    container_name: '${DOCKER_DATABASE_CONTAINER}'
+    image: mongo:latest
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: '${DATABASE_USERNAME}'
+      MONGO_INITDB_ROOT_PASSWORD: '${DATABASE_PASSWORD}'
+    expose:
+      - '${DATABASE_PORT}'
+    volumes:
+      - ./database:/data/db
+    restart: unless-stopped
+
+  giole-app-mongo-express:
+    container_name: '${DOCKER_MONGO_EXPRESS_CONTAINER}'
+    image: mongo-express:latest
+    environment:
+      ME_CONFIG_BASICAUTH_USERNAME: '${DATABASE_USERNAME}'
+      ME_CONFIG_BASICAUTH_PASSWORD: '${DATABASE_PASSWORD}'
+      ME_CONFIG_MONGODB_URL: '${DATABASE_URI}?authSource=admin'
+    ports:
+      - '${MONGO_EXPRESS_PORT_PUBLIC}:${MONGO_EXPRESS_PORT}'
+    depends_on:
+      - '${DOCKER_DATABASE_CONTAINER}'
+    restart: unless-stopped
+
+networks:
+  default:
+    driver: bridge
