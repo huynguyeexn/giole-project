@@ -1,3 +1,4 @@
+import { JwtAccessTokenGuard } from '@modules/auth/guards/jwt-access-token.guard';
 import {
 	Body,
 	Controller,
@@ -9,11 +10,10 @@ import {
 	UseGuards,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { IsPublic } from 'src/decorators/auth.decorators';
 import { CreateTinhThanhDto } from './dto/create-tinh-thanh.dto';
 import { UpdateTinhThanhDto } from './dto/update-tinh-thanh.dto';
 import { TinhThanhService } from './tinh-thanh.service';
-import { JwtAccessTokenGuard } from '@modules/auth/guards/jwt-access-token.guard';
-import { IsPublic } from 'src/decorators/auth.decorators';
 
 @ApiTags('Tinh Thanh')
 @Controller('tinh-thanh')
