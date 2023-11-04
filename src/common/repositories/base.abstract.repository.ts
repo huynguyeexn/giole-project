@@ -15,6 +15,11 @@ export abstract class BaseRepositoryAbstract<T extends BaseEntity>
 		return (await created_data.save()).toObject();
 	}
 
+	async insertMany(dto: T[] | any): Promise<any> {
+		const result = await this.model.insertMany(dto);
+		return result;
+	}
+
 	async findOneById(
 		id: string,
 		projection?: ProjectionType<T>,

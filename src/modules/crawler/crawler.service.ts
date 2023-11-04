@@ -1,25 +1,50 @@
+import { DistrictsService } from '@modules/districts/districts.service';
+import { CreateDistrictDto } from '@modules/districts/dto/create-district.dto';
+import { CreateProvinceDto } from '@modules/provinces/dto/create-province.dto';
+import { ProvincesService } from '@modules/provinces/provinces.service';
 import { Inject, Injectable } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import puppeteer from 'puppeteer';
 import { Logger } from 'winston';
+
+type ProvindersCrawler = {
+	name: string;
+	code: number;
+	division_type: string;
+	codename: string;
+	phone_code: number;
+	districts: [];
+};
+
+type DistrictsCrawler = {
+	name: string;
+	code: number;
+	division_type: string;
+	codename: string;
+	province_code: number;
+	wards: [];
+};
 
 @Injectable()
 export class CrawlerService {
 	constructor(
 		@Inject('winston')
 		private readonly logger = new Logger(),
+		private readonly provinceService: ProvincesService,
+		private readonly districtService: DistrictsService,
 	) {}
 
 	private id = 0;
+	private emptyCount = 0;
 
-	@Cron(CronExpression.EVERY_5_SECONDS)
-	async handleCron() {
+	@Cron(CronExpression.EVERY_6_MONTHS)
+	async churchTimeCrawler() {
 		const browser = await puppeteer.launch({
 			headless: 'new',
 			args: ['--no-sandbox'],
 		});
 		try {
-			if (this.id > 2500) return;
+			if (this.emptyCount > 10) return;
 
 			const page = await browser.newPage();
 
@@ -137,17 +162,105 @@ export class CrawlerService {
 			});
 
 			if (allInfo) {
+				if (this.emptyCount > 0) {
+					this.emptyCount = 0;
+				}
 				this.logger.debug(
 					JSON.stringify({
 						id: this.id - 1,
 						...allInfo,
 					}),
 				);
+			} else {
+				this.emptyCount = ++this.emptyCount;
 			}
 		} catch (error) {
 			this.logger.error({ id: this.id - 1, ...error });
 		} finally {
 			await browser.close();
+		}
+	}
+
+	async provincesCrawler() {
+		try {
+			const res = await fetch('https://provinces.open-api.vn/api/p/');
+			if (res.ok) {
+				const data: ProvindersCrawler[] = await res.json();
+				const remapData: CreateProvinceDto[] = data.map(
+					(p): CreateProvinceDto => {
+						const { code, codename, division_type, name } = p;
+						let slug = codename.replace(/\_/gi, '-');
+
+						if (division_type === 'thành phố trung ương') {
+							slug = slug.replace('thanh-pho-', '');
+						} else if (division_type === 'tỉnh') {
+							slug = slug.replace('tinh-', '');
+						}
+
+						return {
+							province_code: code,
+							name,
+							unaccent_name: slug.replace(/\-/gi, ' '),
+							slug,
+							division_type: p.division_type,
+						};
+					},
+				);
+
+				const result = await this.provinceService.addCrawlerData(remapData);
+				this.logger.debug(result);
+			}
+			return 'OK';
+		} catch (error) {
+			this.logger.error(error);
+			return 'Error';
+		}
+	}
+
+	async districtsCrawler() {
+		try {
+			const res = await fetch('https://provinces.open-api.vn/api/d/');
+			if (res.ok) {
+				const data: DistrictsCrawler[] = await res.json();
+				const remapData: CreateDistrictDto[] = data.map((d) => {
+					const { code, codename, division_type, name, province_code } = d;
+					let slug = codename.replace(/\_/gi, '-');
+
+					switch (division_type) {
+						case 'huyện':
+							slug = slug.replace('huyen-', '');
+							break;
+
+						case 'quận':
+							slug = slug.replace('quan-', '');
+							break;
+
+						case 'thành phố':
+							slug = slug.replace('thanh-pho-', '');
+							break;
+
+						case 'thị xã':
+							slug = slug.replace('thi-xa-', '');
+							break;
+					}
+
+					return {
+						district_code: code,
+						name,
+						unaccent_name: slug.replace(/\-/gi, ' '),
+						slug,
+						division_type: d.division_type,
+						province_code,
+					};
+				});
+
+				const result = await this.districtService.addCrawlerData(remapData);
+				this.logger.debug(result);
+			}
+			return 'OK';
+		} catch (error) {
+			this.logger.error(error);
+			return 'Error';
 		}
 	}
 }

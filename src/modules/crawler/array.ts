@@ -9296,3 +9296,5 @@ const geolocation = [
 		'창인동성당- Cộng Đoàn Việt Nam Tại Iksan Hàn Quốc<br>전라북도 익산시 인북로 132 (창인동성당), Chưa cập nhật',
 	],
 ];
+
+console.log(geolocation);

@@ -4,6 +4,8 @@ import { FilterQuery, ProjectionType, QueryOptions } from 'mongoose';
 export interface BaseRepositoryInterface<T> {
 	create(dto: T | any): Promise<T>;
 
+	insertMany(dto: T[] | any): Promise<any>;
+
 	findOneById(
 		id: string,
 		projection?: ProjectionType<T>,
