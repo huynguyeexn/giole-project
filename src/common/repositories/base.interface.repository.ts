@@ -8,20 +8,20 @@ export interface BaseRepositoryInterface<T> {
 
 	findOneById(
 		id: string,
+		query?: QueryOptions<T>,
 		projection?: ProjectionType<T>,
-		options?: QueryOptions<T>,
 	): Promise<T>;
 
 	findOneByCondition(
-		condition?: FilterQuery<T>,
+		query?: QueryOptions<T>,
+		filter?: FilterQuery<T>,
 		projection?: ProjectionType<T>,
-		options?: QueryOptions<T>,
 	): Promise<T>;
 
 	findAll(
-		condition?: object,
-		projection?: string | object,
-		options?: object,
+		query?: QueryOptions<T>,
+		filter?: FilterQuery<T>,
+		projection?: ProjectionType<T>,
 	): Promise<FindAllResponse<T>>;
 
 	update(id: string, dto: Partial<T>): Promise<T>;

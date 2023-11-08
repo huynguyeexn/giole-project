@@ -13,7 +13,7 @@ export type DistrictDocument = HydratedDocument<District>;
 	},
 })
 export class District extends BaseEntity {
-	@Prop({ required: true, unique: true, length: 10 })
+	@Prop({ required: true, unique: true, length: 10, index: true })
 	district_code: number;
 
 	@Prop({ required: true, length: 100 })
@@ -22,10 +22,10 @@ export class District extends BaseEntity {
 	@Prop({ required: true, length: 100 })
 	unaccent_name: string;
 
-	@Prop({ required: true, length: 100 })
+	@Prop({ required: true, length: 100, index: true })
 	slug: string;
 
-	@Prop({ length: 10 })
+	@Prop({ length: 10, index: true })
 	province_code?: number;
 
 	@Prop({ length: 100 })

@@ -6,6 +6,7 @@ import { DistrictsService } from './districts.service';
 import { District, DistrictSchema } from './entities/district.entity';
 import { DistrictRepository } from './repositories';
 import { CrawlerModule } from '@modules/crawler/crawler.module';
+import { ParishesModule } from '@modules/parishes/parishes.module';
 
 @Module({
 	imports: [
@@ -13,6 +14,8 @@ import { CrawlerModule } from '@modules/crawler/crawler.module';
 			{ name: District.name, schema: DistrictSchema },
 		]),
 		forwardRef(() => CrawlerModule),
+		forwardRef(() => ParishesModule),
+
 		ProvincesModule,
 	],
 	controllers: [DistrictsController],

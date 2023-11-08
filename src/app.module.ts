@@ -3,8 +3,8 @@ import { BullMQConfigModule } from '@configs/bullmq.config';
 import { MongooseConfig } from '@configs/database.config';
 import { WinstonConfigs } from '@configs/winston.config';
 import { CrawlerModule } from '@modules/crawler/crawler.module';
-import { CrawlerService } from '@modules/crawler/crawler.service';
 import { DistrictsModule } from '@modules/districts/districts.module';
+import { ParishesModule } from '@modules/parishes/parishes.module';
 import { ProvincesModule } from '@modules/provinces/provinces.module';
 import { BullModule } from '@nestjs/bullmq';
 import { Module } from '@nestjs/common';
@@ -24,9 +24,10 @@ import { WinstonModule } from 'nest-winston';
 		// AuthModule,
 		ProvincesModule,
 		DistrictsModule,
+		ParishesModule,
 		CrawlerModule,
 	],
 	controllers: [],
-	providers: [CrawlerService],
+	providers: [],
 })
 export class AppModule {}

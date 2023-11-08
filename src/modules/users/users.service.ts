@@ -12,6 +12,7 @@ export class UsersService extends BaseServiceAbstract<User> {
 	async getLoginInfoByUsername(username: string) {
 		try {
 			const user = await this.user_repository.findOneByCondition(
+				{},
 				{
 					username,
 				},

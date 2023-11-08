@@ -1,8 +1,8 @@
 import { BaseServiceAbstract } from '@common/services/base.abstract.service';
 import { Injectable } from '@nestjs/common';
+import { CreateProvinceDto } from './dto/create-province.dto';
 import { Province } from './entities/province.entity';
 import { ProvinceRepository } from './repositories';
-import { CreateProvinceDto } from './dto/create-province.dto';
 
 @Injectable()
 export class ProvincesService extends BaseServiceAbstract<Province> {

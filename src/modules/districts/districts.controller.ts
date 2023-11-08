@@ -7,11 +7,15 @@ import {
 	Param,
 	Patch,
 	Post,
+	Query,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { CreateDistrictDto } from './dto/create-district.dto';
 import { UpdateDistrictDto } from './dto/update-district.dto';
 import { DistrictsService } from './districts.service';
+import { ApiPaginateDto } from '@common/dto/paginate.dto';
+import { District } from './entities/district.entity';
+import { ApiPaginate } from '@decorators/paginate.decorators';
 
 @ApiTags('Districts')
 @Controller('districts')
@@ -27,8 +31,9 @@ export class DistrictsController {
 	}
 
 	@Get()
-	findAll() {
-		return this.districtsService.findAll();
+	@ApiPaginate()
+	findAll(@Query() query: ApiPaginateDto<District>) {
+		return this.districtsService.findAll(query);
 	}
 
 	@Get('crawler')

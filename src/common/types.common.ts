@@ -7,9 +7,9 @@ export enum SORT_TYPE {
 }
 
 export type FindAllResponse<T> = {
-	count: number;
+	totalCount: number;
 	limit: number;
-	skip: number;
+	offset: number;
 	items: T[];
 };
 
@@ -27,4 +27,9 @@ export interface JwtAccessTokenPayload {
 	user: string;
 	iat: string;
 	exp: string;
+}
+
+export enum ApiSortType {
+	asc = 'asc',
+	desc = 'desc',
 }

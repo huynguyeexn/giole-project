@@ -10,9 +10,10 @@ export abstract class BaseRepositoryAbstract<T extends BaseEntity>
 		this.model = model;
 	}
 
-	async create(dto: T | any): Promise<T> {
+	async create(dto: T | any): Promise<T | any> {
 		const created_data = await this.model.create(dto);
-		return (await created_data.save()).toObject();
+		const result = await created_data.save();
+		return result;
 	}
 
 	async insertMany(dto: T[] | any): Promise<any> {
@@ -22,51 +23,51 @@ export abstract class BaseRepositoryAbstract<T extends BaseEntity>
 
 	async findOneById(
 		id: string,
+		query?: QueryOptions<T>,
 		projection?: ProjectionType<T>,
-		options?: QueryOptions<T>,
 	): Promise<T> {
-		const item = await this.model.findById(id, projection, options);
+		const item = await this.model.findById(id, projection, query).exec();
 		return item.deleted_at ? null : item;
 	}
 
 	async findOneByCondition(
-		condition: FilterQuery<T> = {},
+		query?: QueryOptions<T>,
+		filter?: FilterQuery<T>,
 		projection?: ProjectionType<T>,
-		options?: QueryOptions<T>,
 	): Promise<T> {
 		return await this.model
 			.findOne(
 				{
-					...condition,
 					deleted_at: null,
+					...filter,
 				},
 				projection,
-				options,
+				query,
 			)
-			.limit(10)
 			.exec();
 	}
 
 	async findAll(
-		condition: FilterQuery<T>,
+		query?: QueryOptions<T>,
+		filter?: FilterQuery<T>,
 		projection?: ProjectionType<T>,
-		options?: QueryOptions<T>,
 	): Promise<FindAllResponse<T>> {
-		condition = { deleted_at: null, ...condition };
-		options = {
+		filter = { deleted_at: null, ...filter };
+		query = {
 			limit: 10,
 			skip: 0,
-			...options,
+			...query,
 		};
+
 		const [count, items] = await Promise.all([
-			this.model.count(condition),
-			this.model.find(condition, projection, options),
+			this.model.count(filter),
+			this.model.find(filter, projection, query),
 		]);
 
 		return {
-			count,
-			limit: options.limit,
-			skip: options.skip,
+			totalCount: count,
+			limit: query.limit,
+			offset: query.skip || 0,
 			items,
 		};
 	}

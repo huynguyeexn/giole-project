@@ -18,20 +18,12 @@
 		"forceConsistentCasingInFileNames": false,
 		"noFallthroughCasesInSwitch": false,
 		"paths": {
-			"@components/*": ["./src/components/*"],
-			"@configs/*": ["./src/configs/*"],
-			"@controllers/*": ["./src/controllers/*"],
-			"@helpers/*": ["./src/helpers/*"],
-			"@interfaces/*": ["./src/interfaces/*"],
-			"@middlewares/*": ["./src/middlewares/*"],
-			"@models/*": ["./src/models/*"],
-			"@modules/*": ["./src/modules/*"],
-			"@repositories/*": ["src/common/repositories/*"],
-			"@routes/*": ["./src/routes/*"],
-			"@services/*": ["./src/services/*"],
 			"@common/*": ["./src/common/*"],
-			"@utils/*": ["./src/utils/*"],
-			"@validations/*": ["./src/validations/*"]
+			"@configs/*": ["./src/configs/*"],
+			"@decorators/*": ["./src/decorators/*"],
+			"@controllers/*": ["./src/controllers/*"],
+			"@modules/*": ["./src/modules/*"],
+			"@repositories/*": ["src/common/repositories/*"]
 		}
 	},
 	"include": ["src/**/*"],

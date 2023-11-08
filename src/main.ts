@@ -13,8 +13,8 @@ async function bootstrap() {
 	app.use(morgan('dev'));
 	app.useGlobalPipes(
 		new ValidationPipe({
-			// whitelist: true,
-			// skipMissingProperties: true,
+			whitelist: true,
+			skipMissingProperties: true,
 		}),
 	);
 

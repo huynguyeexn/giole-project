@@ -1,3 +1,4 @@
+import { ApiPaginate } from '@decorators/paginate.decorators';
 import { CrawlerService } from '@modules/crawler/crawler.service';
 import {
 	Body,
@@ -7,11 +8,15 @@ import {
 	Param,
 	Patch,
 	Post,
+	Query,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { QueryOptions } from 'mongoose';
 import { CreateProvinceDto } from './dto/create-province.dto';
 import { UpdateProvinceDto } from './dto/update-province.dto';
+import { Province } from './entities/province.entity';
 import { ProvincesService } from './provinces.service';
+import { ApiPaginateDto } from '@common/dto/paginate.dto';
 
 @ApiTags('Provinces')
 @Controller('provinces')
@@ -27,8 +32,9 @@ export class ProvincesController {
 	}
 
 	@Get()
-	findAll() {
-		return this.provincesService.findAll();
+	@ApiPaginate()
+	findAll(@Query() query: ApiPaginateDto<Province>) {
+		return this.provincesService.findAll(query);
 	}
 
 	@Get('crawler')

@@ -5,12 +5,14 @@ import { ProvincesController } from './provinces.controller';
 import { ProvincesService } from './provinces.service';
 import { ProvinceRepository } from './repositories';
 import { CrawlerModule } from '@modules/crawler/crawler.module';
+import { ParishesModule } from '@modules/parishes/parishes.module';
 
 @Module({
 	imports: [
 		MongooseModule.forFeature([
 			{ name: Province.name, schema: ProvinceSchema },
 		]),
+		forwardRef(() => ParishesModule),
 		forwardRef(() => CrawlerModule),
 	],
 	controllers: [ProvincesController],
