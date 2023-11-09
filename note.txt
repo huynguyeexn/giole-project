@@ -1,0 +1,13 @@
+{
+    "address.district": null,
+    "address.province": {$ne: null}
+}
+
+total: 116
+
+
+{
+    "address.district": null,
+    "address.province": null
+}
+total: 199

@@ -1,3 +1,4 @@
+import { ApiPaginateDto } from '@common/dto/paginate.dto';
 import { ApiPaginate } from '@decorators/paginate.decorators';
 import { CrawlerService } from '@modules/crawler/crawler.service';
 import {
@@ -11,12 +12,10 @@ import {
 	Query,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { QueryOptions } from 'mongoose';
 import { CreateParishDto } from './dto/create-parish.dto';
 import { UpdateParishDto } from './dto/update-parish.dto';
 import { Parishes } from './entities/parish.entity';
 import { ParishesService } from './parishes.service';
-import { ApiPaginateDto } from '@common/dto/paginate.dto';
 
 @ApiTags('Parishes')
 @Controller('parishes')
@@ -39,7 +38,8 @@ export class ParishesController {
 
 	@Get('crawler')
 	crawler() {
-		return this.crawlerService.parishesCrawler();
+		this.crawlerService.parishesCrawler();
+		return 'Job is running!';
 	}
 
 	@Get(':id')

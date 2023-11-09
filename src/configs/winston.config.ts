@@ -5,7 +5,7 @@ export const WinstonConfigs: WinstonModuleOptions = {
 	format: winston.format.combine(
 		winston.format.timestamp(),
 		winston.format.json(),
-		winston.format.prettyPrint(),
+		// winston.format.prettyPrint(),
 	),
 	transports: [
 		new winston.transports.Console(),
@@ -13,11 +13,6 @@ export const WinstonConfigs: WinstonModuleOptions = {
 			dirname: './log/debug/',
 			filename: 'debug.log',
 			level: 'debug',
-		}),
-		new winston.transports.File({
-			dirname: './log/info/',
-			filename: 'info.log',
-			level: 'info',
 		}),
 		new winston.transports.File({
 			dirname: './log/error/',

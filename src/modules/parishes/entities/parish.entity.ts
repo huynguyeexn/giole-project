@@ -2,32 +2,35 @@ import { BaseEntity } from '@common/entity/base.entity';
 import { District } from '@modules/districts/entities/district.entity';
 import { Province } from '@modules/provinces/entities/province.entity';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, HydratedDocument } from 'mongoose';
+import { HydratedDocument } from 'mongoose';
 
 export type ParishAddressDocument = HydratedDocument<ParishAddress>;
-// Nested Schema
 @Schema({ _id: false, autoIndex: false, excludeIndexes: true })
 export class ParishAddress {
+	@Prop({ type: String })
+	streetNumber: string;
+
+	@Prop({ type: String })
+	wards: string;
+
 	@Prop({ type: Province, ref: Province.name })
 	province?: Province;
 
 	@Prop({ type: District, ref: District.name })
 	district?: District;
-
-	wards?: string;
-
-	streetNumber?: string;
 }
 export const ParishAddressSchema = SchemaFactory.createForClass(ParishAddress);
 
 export type ParishMassTimesDocument = HydratedDocument<ParishMassTimes>;
-// Nested Schema
 @Schema({ _id: false })
 export class ParishMassTimes {
+	@Prop({ type: [String] })
 	normalDay?: string[];
 
+	@Prop({ type: [String] })
 	saturday?: string[];
 
+	@Prop({ type: [String] })
 	sunday?: string[];
 }
 export const ParishMassTimesSchema =
@@ -57,6 +60,7 @@ export class Parishes extends BaseEntity {
 	@Prop({ required: true, length: 100, index: true })
 	slug: string;
 
+	@Prop()
 	note?: string;
 
 	@Prop({ type: ParishAddress, ref: ParishAddress.name })
